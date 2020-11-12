@@ -4,9 +4,13 @@ namespace App\Entity;
 
 use App\Repository\MovieRepository;
 use Doctrine\ORM\Mapping as ORM;
+use Symfony\Component\Validator\Constraints as Assert;
+use Symfony\Bridge\Doctrine\Validator\Constraints\UniqueEntity;
+
 
 /**
  * @ORM\Entity(repositoryClass=MovieRepository::class)
+ * @UniqueEntity(fields={"isan"})
  */
 class Movie
 {
@@ -19,21 +23,25 @@ class Movie
 
     /**
      * @ORM\Column(type="string", length=255, unique=true)
+     * @Assert\NotBlank
      */
     private $isan;
 
     /**
      * @ORM\Column(type="string", length=255)
+     * @Assert\NotBlank
      */
     private $title;
 
     /**
      * @ORM\Column(type="text")
+     * @Assert\NotBlank
      */
     private $description;
 
     /**
      * @ORM\Column(type="string", length=45)
+     * @Assert\NotBlank
      */
     private $runtime;
 
@@ -44,6 +52,7 @@ class Movie
 
     /**
      * @ORM\Column(type="datetime")
+     * @Assert\NotBlank
      */
     private $realeaseAt;
 
