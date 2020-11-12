@@ -18,6 +18,11 @@ class Movie
     private $id;
 
     /**
+     * @ORM\Column(type="string", length=255, unique=true)
+     */
+    private $isan;
+
+    /**
      * @ORM\Column(type="string", length=255)
      */
     private $title;
@@ -45,6 +50,18 @@ class Movie
     public function getId(): ?int
     {
         return $this->id;
+    }
+
+    public function getIsan(): ?string
+    {
+        return $this->isan;
+    }
+
+    public function setIsan(string $isan): self
+    {
+        $this->isan = $isan;
+
+        return $this;
     }
 
     public function getTitle(): ?string
