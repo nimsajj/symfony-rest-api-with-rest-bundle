@@ -5,6 +5,7 @@ namespace App\Repository;
 use App\Entity\Movie;
 use Doctrine\Bundle\DoctrineBundle\Repository\ServiceEntityRepository;
 use Doctrine\Persistence\ManagerRegistry;
+use Doctrine\ORM\EntityManagerInterface;
 
 /**
  * @method Movie|null find($id, $lockMode = null, $lockVersion = null)
@@ -14,37 +15,25 @@ use Doctrine\Persistence\ManagerRegistry;
  */
 class MovieRepository extends ServiceEntityRepository
 {
-    public function __construct(ManagerRegistry $registry)
+    private $manager;
+
+    public function __construct(ManagerRegistry $registry, EntityManagerInterface $manager)
     {
         parent::__construct($registry, Movie::class);
+        $this->manager = $manager;
     }
 
-    // /**
-    //  * @return Movie[] Returns an array of Movie objects
-    //  */
-    /*
-    public function findByExampleField($value)
+    public function save(Movie $movie): Movie
     {
-        return $this->createQueryBuilder('m')
-            ->andWhere('m.exampleField = :val')
-            ->setParameter('val', $value)
-            ->orderBy('m.id', 'ASC')
-            ->setMaxResults(10)
-            ->getQuery()
-            ->getResult()
-        ;
-    }
-    */
+        $this->manager->persist($movie);
+        $this->manager->flush();
 
-    /*
-    public function findOneBySomeField($value): ?Movie
-    {
-        return $this->createQueryBuilder('m')
-            ->andWhere('m.exampleField = :val')
-            ->setParameter('val', $value)
-            ->getQuery()
-            ->getOneOrNullResult()
-        ;
+        return $movie;
     }
-    */
+
+    public function remove(Movie $movie): void
+    {
+        $this->manager->remove($movie);
+        $this->manager->flush();
+    }
 }
