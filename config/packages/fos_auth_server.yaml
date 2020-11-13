@@ -6,7 +6,7 @@ fos_oauth_server:
   auth_code_class: App\Entity\AuthCode
   authorize: false
   service:
-    user_provider: fos_user.user_provider.email
+    user_provider: security.user.provider.concrete.app_user_provider
     options:
       access_token_lifetime: 86400
       refresh_token_lifetime: 1209600
