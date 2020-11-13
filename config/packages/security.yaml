@@ -1,32 +1,34 @@
 security:
-    encoders:
-        App\Entity\User:
-            algorithm: auto
-
-    # https://symfony.com/doc/current/security.html#where-do-users-come-from-user-providers
-    providers:
-        # used to reload user from session & other features (e.g. switch_user)
-        app_user_provider:
-            entity:
-                class: App\Entity\User
-                property: email
-    firewalls:
-        dev:
-            pattern: ^/(_(profiler|wdt)|css|images|js)/
-            security: false
-        main:
-            anonymous: true
-            lazy: true
-            provider: app_user_provider
-
-            # activate different ways to authenticate
-            # https://symfony.com/doc/current/security.html#firewalls-authentication
-
-            # https://symfony.com/doc/current/security/impersonating_user.html
-            # switch_user: true
-
-    # Easy way to control access for large sections of your site
-    # Note: Only the *first* access control that matches will be used
-    access_control:
-        # - { path: ^/admin, roles: ROLE_ADMIN }
-        # - { path: ^/profile, roles: ROLE_USER }
+  encoders:
+    App\Entity\User: bcrypt
+  role_hierarchy:
+    ROLE_ADMIN: ROLE_USER
+    ROLE_SUPER_ADMIN: ROLE_ADMIN
+  providers:
+    app_user_provider:
+      entity:
+        class: App\Entity\User
+        property: email
+  firewalls:
+    oauth_token:
+      pattern: ^/oauth/v2/token
+      security: false
+    oauth_authorize:
+      pattern: ^/oauth/v2/auth
+      form_login:
+        provider: app_user_provider
+        check_path: /oauth/v2/auth_login_check
+        login_path: /oauth/v2/auth_login
+        use_referer: true
+    api:
+      pattern: ^/api
+      fos_oauth: true
+      stateless: true
+      anonymous: false
+    main:
+      anonymous: true
+      lazy: true
+      provider: app_user_provider
+  access_control:
+    - { path: ^/api, roles: [IS_AUTHENTICATED_FULLY] }
+    - { path: ^/register, roles: [IS_AUTHENTICATED_ANONYMOUSLY] }
