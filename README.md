@@ -45,5 +45,5 @@ Use the endpoint: POST /oauth/v2/token
 The response return and acceess_token and refresh_token.
 You must then use this bearer token in the authorization header for the other endpoints
 
-**Note: Inform the client_id, client_secret previously generated and inform the username and password previously created **
+**Note: Inform the client_id, client_secret previously generated and inform the username and password previously created**
 
